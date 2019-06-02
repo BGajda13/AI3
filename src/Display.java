@@ -8,8 +8,20 @@ public class Display {
     }
 
     /*Display Section*/
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
     private String player = "\u26AB" + "\u2004";  //
     private String opponent = "\u26AA" + "\u2004"; //
+    private String wrong = ANSI_RED + "\u26AA" + "\u2004" + ANSI_RESET; //
+
     private String empty = "\u3000" + "\u2009"; // u3000
 
     //Corners
@@ -79,6 +91,7 @@ public class Display {
         for (int i = 0; i < row.length ; i++) {
             if(row[i]==1) sb.append(player);
             else if(row[i]==2) sb.append(opponent);
+            else if(row[i]==3) sb.append(wrong);
             else sb.append(empty);
             sb.append(VER);
         }
@@ -101,6 +114,7 @@ public class Display {
             sb.append(contentLine(board[i],i));
         }
         sb.append(lastLine(board.length));
+        sb.append("\n\n");
         System.out.println(sb);
     }
 }

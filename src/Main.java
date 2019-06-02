@@ -2,26 +2,35 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-        Stratego stratego = new Stratego(4);
+        int N = 4;
+        Stratego stratego = new Stratego(N);
         Display display = new Display(stratego);
         Scanner in = new Scanner(System.in);
+        System.out.println("STRATEGOOOO!!! N="+N+"\n");
 
         while(stratego.getMovesLeft() >0){
 
-
+            int row,col;
             //Player
-            System.out.print("Give row: ");
-            int row = in.nextInt();
-            System.out.print("Give column: ");
-            int col = in.nextInt();
-            stratego.put(row,col,true);
+            do {
+                display.display();
+                System.out.print("Give row: ");
+                row = in.nextInt();
+                System.out.print("Give column: ");
+                col = in.nextInt();
+            }
+            while(!stratego.tryPut(row,col,true));
 
-            System.out.println();
             display.display();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //Computer
-            stratego.computerTurn();
-            display.display();
+            stratego.greedyMove();
+
         }
 
         System.out.println("Player score: " + stratego.getPlayerScore());
