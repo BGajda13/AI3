@@ -6,6 +6,7 @@ public class Stratego {
         if(N < 4) throw new IllegalArgumentException("N < 4");
         matrix = new int[N][N];
         this.movesLeft = N*N;
+        System.out.println("MAX POINTS :" + getMaxScore());
     }
 
     public int[][] getMatrix() {
@@ -23,6 +24,28 @@ public class Stratego {
     public int getComputerScore() {
         return computerScore;
     }
+
+    public int getMaxScore(){
+        int maxScore = 0;
+        //Za kolumny i wiersze
+        maxScore += matrix.length * matrix.length *2;
+
+        int tempScore = 0;
+        //Za przekątne niegłówne
+        for (int i = 2; i < matrix.length; i++) {
+            tempScore += i;
+        }
+        //Symetria
+        tempScore *=2;
+        //Srodkowa
+        tempScore +=matrix.length;
+        //Symatetria przekatnych
+        tempScore *=2;
+
+        maxScore += tempScore;
+        return maxScore;
+    }
+
     private void undo(int row, int col){
         matrix[row][col] = 0;
     }
@@ -199,10 +222,10 @@ public class Stratego {
             col = (int) (Math.random() * matrix.length);
         }
         while(matrix[row][col]!=0);
-        put(row,col,false);
-
+        put(row,col,true);
     }
     public void greedyMove(){
+        // Looking for most prominent move
         int bestScore = 0, bestRow = 0, bestCol = 0;
         for (int row = 0; row < matrix.length; row++) {
             for (int col = 0; col < matrix.length; col++) {
@@ -216,9 +239,59 @@ public class Stratego {
                 }
             }
         }
-        if(bestScore == 0) randomMove();
-        else
+        if(bestScore > 0){
             put(bestRow,bestCol,false);
+            return;
+        }
+        //If there is no prominent move, then look for a best col or row
+        int[] rowsRank = new int[matrix.length];
+        int[] colsRank = new int[matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            int rowScore = 0;
+            int colScore = 0;
+            for (int j = 0; j < matrix.length; j++) {
+                if(matrix[i][j]!=0) rowScore++;
+                if(matrix[j][i]!=0) colScore++;
+            }
+            rowsRank[i] = rowScore;
+            colsRank[i] = colScore;
+        }
+
+        int maxR = rowsRank[0], indexR=0;
+        for (int i = 0; i < rowsRank.length; i++) {
+            if(rowsRank[i] > maxR){
+                maxR = rowsRank[i];
+                indexR = i;
+            }
+        }
+
+        int maxC = colsRank[0], indexC=0;
+        for (int i = 0; i < colsRank.length; i++) {
+            if(colsRank[i] > maxC){
+                maxC = colsRank[i];
+                indexC = i;
+            }
+        }
+
+        if(maxC > maxR){
+            for (int i = 0; i < matrix.length; i++) {
+                if(matrix[i][indexC]==0){
+                    put(i,indexC,false);
+                    return;
+                }
+            }
+        }
+        else if(maxC < maxR){
+            for (int i = 0; i < matrix.length; i++) {
+                if(matrix[indexR][i]==0){
+                    put(indexR,i,false);
+                    return;
+                }
+            }
+        }
+        else
+            randomMove();
+        return;
     }
 
 
@@ -226,5 +299,16 @@ public class Stratego {
     public String toString() {
        return "Use Display class!";
     }
+
+    public int[][] cloneArr() {
+        int[][] result = new int[matrix.length][matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                result[i][j] = matrix[i][j];
+            }
+        }
+        return result;
+    }
+
 
 }

@@ -2,16 +2,16 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int N = 4;
+        int N = 5;
         Stratego stratego = new Stratego(N);
         Display display = new Display(stratego);
         Scanner in = new Scanner(System.in);
-        System.out.println("STRATEGOOOO!!! N="+N+"\n");
+        System.out.println("STRATEGO N="+N+"\n");
 
-        while(stratego.getMovesLeft() >0){
+        while(stratego.getMovesLeft()>0){
 
             int row,col;
-            //Player
+//            //Player
             do {
                 display.display();
                 System.out.print("Give row: ");
@@ -20,14 +20,15 @@ public class Main {
                 col = in.nextInt();
             }
             while(!stratego.tryPut(row,col,true));
+            //stratego.randomMove();
 
             display.display();
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             //Computer
             stratego.greedyMove();
 
